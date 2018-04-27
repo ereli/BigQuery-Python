@@ -5,7 +5,7 @@ logger.addHandler(NullHandler())
 
 
 def render_query(dataset, tables, select=None, conditions=None,
-                 groupings=None, having=None, order_by=None, limit=None):
+                 groupings=None, having=None, order_by=None, limit=None, use_legacy_sql=None):
     """Render a query that will run over the given tables using the specified
     parameters.
 
@@ -36,7 +36,8 @@ def render_query(dataset, tables, select=None, conditions=None,
         {'field':'TimeStamp, 'direction':'desc'} or similar
     limit : int, optional
         Limit the amount of data needed to be returned.
-
+    use_legacy_sql: bool, optional
+        Use legacy SQL syntax instead of Standard SQL. 
     Returns
     -------
     str
@@ -131,7 +132,7 @@ def _format_select(formatter, name):
     return name
 
 
-def _render_sources(dataset, tables):
+def _render_sources(dataset, tables, use_legacy_sql=None ):
     """Render the source part of a query.
 
     Parameters
@@ -160,9 +161,14 @@ def _render_sources(dataset, tables):
                     'Missing parameter %s in selecting sources' % (exp))
 
     else:
-        return "FROM " + ", ".join(
+        if use_legacy_sql is True:
+            return "FROM " + ", ".join(
             ["[%s.%s]" % (dataset, table) for table in tables])
+        else:
+            return "FROM " + ", ".join(
+            ["`%s.%s`" % (dataset, table) for table in tables])
 
+        
 
 def _render_conditions(conditions):
     """Render the conditions part of a query.

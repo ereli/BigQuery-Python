@@ -62,7 +62,7 @@ class TestRenderSources(unittest.TestCase):
         result = _render_sources('spider', ['man', 'pig', 'bro'])
 
         self.assertEqual(
-            result, 'FROM [spider.man], [spider.pig], [spider.bro]')
+            result, 'FROM `spider.man`, `spider.pig`, `spider.bro`')
 
     def test_no_tables(self):
         """Ensure that render sources can handle no tables."""
@@ -78,7 +78,7 @@ class TestRenderSources(unittest.TestCase):
 
         result = _render_sources('', ['man', 'pig', 'bro'])
 
-        self.assertEqual(result, 'FROM [.man], [.pig], [.bro]')
+        self.assertEqual(result, 'FROM `.man`, `.pig`, `.bro`')
 
     def test_tables_in_date_range(self):
         """Ensure that render sources can handle tables in DATE RANGE."""
@@ -417,7 +417,7 @@ class TestRenderQuery(unittest.TestCase):
             limit=10)
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
-                          "resource as url FROM [dataset.2013_06_appspot_1]"
+                          "resource as url FROM `dataset.2013_06_appspot_1`"
                           " WHERE (start_time <= INTEGER('1371566954')) AND "
                           "(start_time >= INTEGER('1371556954')) GROUP BY "
                           "timestamp, status HAVING (status == INTEGER('1')) "
@@ -448,7 +448,7 @@ class TestRenderQuery(unittest.TestCase):
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1]    ORDER BY "
+                          "`dataset.2013_06_appspot_1`    ORDER BY "
                           "timestamp desc ")
         expected_select = (expected_query[len('SELECT '):]
                            .split('FROM')[0].strip().split(', '))
@@ -485,7 +485,7 @@ class TestRenderQuery(unittest.TestCase):
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1]    ORDER BY "
+                          "`dataset.2013_06_appspot_1`    ORDER BY "
                           "timestamp desc ")
         expected_select = (expected_query[len('SELECT '):]
                            .split('FROM')[0].strip().split(', '))
@@ -533,7 +533,7 @@ class TestRenderQuery(unittest.TestCase):
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1] WHERE (start_time "
+                          "`dataset.2013_06_appspot_1` WHERE (start_time "
                           "<= INTEGER('1371566954')) AND (start_time >= "
                           "INTEGER('1371556954')) AND "
                           "((resource CONTAINS STRING('foo') AND resource "
@@ -571,7 +571,7 @@ class TestRenderQuery(unittest.TestCase):
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1] WHERE (NOT resource "
+                          "`dataset.2013_06_appspot_1` WHERE (NOT resource "
                           "CONTAINS STRING('foo'))   ORDER BY timestamp desc ")
         expected_select = (expected_query[len('SELECT '):]
                            .split('FROM')[0].strip().split(', '))
@@ -612,7 +612,7 @@ class TestRenderQuery(unittest.TestCase):
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1] WHERE (NOT resource "
+                          "`dataset.2013_06_appspot_1` WHERE (NOT resource "
                           "CONTAINS STRING('foo') AND NOT resource CONTAINS "
                           "STRING('baz') AND NOT resource CONTAINS "
                           "STRING('bar'))   ORDER BY timestamp desc ")
@@ -651,7 +651,7 @@ class TestRenderQuery(unittest.TestCase):
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1] WHERE (start_time "
+                          "`dataset.2013_06_appspot_1` WHERE (start_time "
                           "<= INTEGER('1371566954')) AND (start_time >= "
                           "INTEGER('1371556954'))    ")
         expected_select = (expected_query[len('SELECT '):]
@@ -689,7 +689,7 @@ class TestRenderQuery(unittest.TestCase):
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1] WHERE (start_time "
+                          "`dataset.2013_06_appspot_1` WHERE (start_time "
                           "<= INTEGER('1371566954')) AND (start_time >= "
                           "INTEGER('1371556954'))    ")
         expected_select = (expected_query[len('SELECT '):]
@@ -721,7 +721,7 @@ class TestRenderQuery(unittest.TestCase):
             ],
             order_by={'fields': ['timestamp'], 'direction': 'desc'})
 
-        expected_query = ("SELECT * FROM [dataset.2013_06_appspot_1] "
+        expected_query = ("SELECT * FROM `dataset.2013_06_appspot_1` "
                           "WHERE (start_time <= INTEGER('1371566954')) AND "
                           "(start_time >= INTEGER('1371556954'))   ORDER BY "
                           "timestamp desc ")
@@ -752,7 +752,7 @@ class TestRenderQuery(unittest.TestCase):
             order_by={'fields': ['start_time'], 'direction': 'desc'})
 
         expected_query = ("SELECT status , start_time , resource  FROM "
-                          "[dataset.2013_06_appspot_1] WHERE (start_time "
+                          "`dataset.2013_06_appspot_1` WHERE (start_time "
                           "<= INTEGER('1371566954')) AND (start_time >= "
                           "INTEGER('1371556954'))   ORDER BY start_time desc ")
         expected_select = (field.strip() for field in
@@ -797,7 +797,7 @@ class TestRenderQuery(unittest.TestCase):
         expected_query = ("SELECT status as status, "
                           "FORMAT_UTC_USEC(INTEGER(start_time)) as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1] WHERE (start_time "
+                          "`dataset.2013_06_appspot_1` WHERE (start_time "
                           "<= INTEGER('1371566954')) AND (start_time >= "
                           "INTEGER('1371556954'))   ORDER BY timestamp desc ")
         expected_select = (expected_query[len('SELECT '):]
@@ -849,7 +849,7 @@ class TestRenderQuery(unittest.TestCase):
                           "FORMAT_UTC_USEC(INTEGER(start_time)) as timestamp, "
                           "LEFT(FORMAT_UTC_USEC(INTEGER(start_time*1000000)),"
                           "10) as day, resource as url FROM "
-                          "[dataset.2013_06_appspot_1] WHERE "
+                          "`dataset.2013_06_appspot_1` WHERE "
                           "(start_time <= INTEGER('1371566954')) AND "
                           "(start_time >= INTEGER('1371556954'))   ORDER BY "
                           "timestamp desc ")
@@ -894,7 +894,7 @@ class TestRenderQuery(unittest.TestCase):
         expected_query = ("SELECT status as status, "
                           "SEC_TO_TIMESTAMP(INTEGER(start_time*1000000)) as "
                           "timestamp, resource as url FROM "
-                          "[dataset.2013_06_appspot_1] WHERE (start_time "
+                          "`dataset.2013_06_appspot_1` WHERE (start_time "
                           "<= INTEGER('1371566954')) AND (start_time >= "
                           "INTEGER('1371556954'))   ORDER BY timestamp desc ")
         expected_select = (expected_query[len('SELECT '):]
@@ -952,7 +952,7 @@ class TestRenderQuery(unittest.TestCase):
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1]    ORDER BY "
+                          "`dataset.2013_06_appspot_1`    ORDER BY "
                           "timestamp desc ")
         expected_select = (expected_query[len('SELECT '):]
                            .split('FROM')[0].strip().split(', '))
@@ -990,8 +990,8 @@ class TestRenderQuery(unittest.TestCase):
 
         expected_query = ("SELECT status as status, start_time as timestamp, "
                           "resource as url FROM "
-                          "[dataset.2013_06_appspot_1], "
-                          "[dataset.2013_07_appspot_1] WHERE (start_time "
+                          "`dataset.2013_06_appspot_1`, "
+                          "`dataset.2013_07_appspot_1` WHERE (start_time "
                           "<= INTEGER('1371566954')) AND (start_time >= "
                           "INTEGER('1371556954')) GROUP BY timestamp, status  "
                           "ORDER BY timestamp desc ")
