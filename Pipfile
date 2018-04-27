@@ -4,16 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+
+
+[dev-packages]
+google-api-python-client = "*"
+python-dateutil = "*"
 nose = "*"
 rednose = "*"
 mock = "==1.0.1"
 coverage = "*"
 nose-exclude = "*"
 tox = "*"
-
-[dev-packages]
-google-api-python-client = "*"
-python-dateutil = "*"
 
 [requires]
 python_version = "3.6"
